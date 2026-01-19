@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUDOCHOP Business Suite | AI-Powered Business Development</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2300ff41'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='%23000'>S</text></svg>">
+    <style>
+        :root {
+            --primary: #00ff41;
+            --secondary: #00ffff;
+            --accent: #bf00ff;
+            --dark: #0a0e27;
+            --darker: #050810;
+            --card: rgba(10, 14, 39, 0.95);
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 30% 40%, rgba(0,255,65,0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 70% 60%, rgba(0,255,255,0.1) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(191,0,255,0.08) 0%, transparent 40%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(0,255,65,0.3); }
+            50% { box-shadow: 0 0 60px rgba(0,255,65,0.5); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0,255,65,0.2), rgba(0,255,255,0.2));
+            border: 3px solid var(--primary);
+        }
+
+        .logo svg {
+            width: 80%;
+            height: 80%;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Platform Grid */
+        .platforms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .platform-card {
+            background: var(--card);
+            border: 2px solid rgba(0,255,65,0.2);
+            border-radius: 24px;
+            padding: 40px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out backwards;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0.1s; }
+        .platform-card:nth-child(2) { animation-delay: 0.2s; }
+        .platform-card:nth-child(3) { animation-delay: 0.3s; }
+        .platform-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .platform-card:hover::before {
+            left: 100%;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0,255,65,0.3);
+        }
+
+        .platform-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,255,65,0.3);
+        }
+
+        .platform-card h2 {
+            font-size: 1.8em;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .platform-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .platform-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .feature-tag {
+            padding: 8px 16px;
+            background: rgba(0,255,65,0.1);
+            border: 1px solid rgba(0,255,65,0.3);
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: var(--secondary);
+        }
+
+        .platform-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(0,255,65,0.15);
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .platform-status.pending {
+            background: rgba(255,165,0,0.15);
+            color: #ffa500;
+        }
+
+        .platform-status.pending .status-dot {
+            background: #ffa500;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            background: var(--card);
+            border: 2px solid rgba(0,255,255,0.2);
+            border-radius: 24px;
+            padding: 40px;
+            animation: slideUp 0.8s ease-out 0.5s backwards;
+        }
+
+        .quick-links h3 {
+            color: var(--secondary);
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 24px;
+            background: rgba(0,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 15px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .quick-link:hover {
+            background: rgba(0,255,255,0.15);
+            border-color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .quick-link-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            flex-shrink: 0;
+        }
+
+        .quick-link-text h4 {
+            font-size: 1em;
+            margin-bottom: 3px;
+        }
+
+        .quick-link-text span {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            animation: slideUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer h4 {
+            color: var(--primary);
+            font-size: 1.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .platforms {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-card {
+                padding: 30px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00ff41"/>
+                            <stop offset="50%" style="stop-color:#00ffff"/>
+                            <stop offset="100%" style="stop-color:#bf00ff"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+                    <text x="50" y="68" font-size="55" text-anchor="middle" fill="url(#logoGradient)" font-weight="bold">S</text>
+                </svg>
+            </div>
+            <h1>SUDOCHOP Business Suite</h1>
+            <p>AI-Powered Business Development Platform - Document Management, Grant Finding, Proposal Writing & More</p>
+        </header>
+
+        <!-- Platforms -->
+        <div class="platforms">
+            <!-- BWOP Platform -->
+            <a href="bwop-production-platform.html" class="platform-card">
+                <div class="platform-icon">🚀</div>
+                <h2>BWOP Business AI</h2>
+                <p>Complete AI-powered business development platform with document scanning, grant finding, proposal writing, and loan matching.</p>
+                <div class="platform-features">
+                    <span class="feature-tag">📄 Document Scanner</span>
+                    <span class="feature-tag">💰 Grant Finder</span>
+                    <span class="feature-tag">✍️ Proposal Writer</span>
+                    <span class="feature-tag">🏦 Loan Matcher</span>
+                    <span class="feature-tag">🤖 7 AI Agents</span>
+                </div>
+                <div class="platform-status">
+                    <span class="status-dot"></span>
+                    Ready to Use
+                </div>
+            </a>
+
+            <!-- DocuFlow -->
+            <a href="project/app/page.jsx" class="platform-card" onclick="alert('DocuFlow requires npm install. Transfer project folder to a system with Node.js or deploy to Vercel.'); return false;">
+                <div class="platform-icon">📝</div>
+                <h2>DocuFlow Editor</h2>
+                <p>Modern Next.js document editor with AI-powered field detection, template creation, and intelligent form management.</p>
+                <div class="platform-features">
+                    <span class="feature-tag">🎯 Auto Field Detection</span>
+                    <span class="feature-tag">✏️ Draw Fields</span>
+                    <span class="feature-tag">🌙 Dark Mode</span>
+                    <span class="feature-tag">💾 LocalStorage</span>
+                </div>
+                <div class="platform-status pending">
+                    <span class="status-dot"></span>
+                    Requires Build
+                </div>
+            </a>
+
+            <!-- Premium Platform -->
+            <a href="business-dev-platform-premium.html" class="platform-card">
+                <div class="platform-icon">💎</div>
+                <h2>Premium Platform</h2>
+                <p>Enhanced business development tools with premium features and streamlined interface for power users.</p>
+                <div class="platform-features">
+                    <span class="feature-tag">⚡ Fast Loading</span>
+                    <span class="feature-tag">🎨 Clean UI</span>
+                    <span class="feature-tag">📊 Analytics</span>
+                </div>
+                <div class="platform-status">
+                    <span class="status-dot"></span>
+                    Ready to Use
+                </div>
+            </a>
+
+            <!-- Standard Platform -->
+            <a href="business-dev-platform.html" class="platform-card">
+                <div class="platform-icon">📋</div>
+                <h2>Standard Platform</h2>
+                <p>Core business development features in a lightweight package. Perfect for quick access and basic needs.</p>
+                <div class="platform-features">
+                    <span class="feature-tag">🪶 Lightweight</span>
+                    <span class="feature-tag">⚡ Fast</span>
+                    <span class="feature-tag">📱 Mobile Ready</span>
+                </div>
+                <div class="platform-status">
+                    <span class="status-dot"></span>
+                    Ready to Use
+                </div>
+            </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <h3>📁 Quick Access</h3>
+            <div class="links-grid">
+                <a href="bwop-production-platform.html" class="quick-link">
+                    <div class="quick-link-icon">🎯</div>
+                    <div class="quick-link-text">
+                        <h4>Main Platform</h4>
+                        <span>Full-featured BWOP AI System</span>
+                    </div>
+                </a>
+                <a href="ULTIMATE_BUSINESS_INTELLIGENCE_NEXUS.html" class="quick-link">
+                    <div class="quick-link-icon">🧠</div>
+                    <div class="quick-link-text">
+                        <h4>Intelligence Nexus</h4>
+                        <span>Advanced Business Intelligence</span>
+                    </div>
+                </a>
+                <a href="index-1.html" class="quick-link">
+                    <div class="quick-link-icon">🏠</div>
+                    <div class="quick-link-text">
+                        <h4>Original Landing</h4>
+                        <span>Previous landing page</span>
+                    </div>
+                </a>
+                <a href="README.md" class="quick-link">
+                    <div class="quick-link-icon">📖</div>
+                    <div class="quick-link-text">
+                        <h4>Documentation</h4>
+                        <span>Full project guide</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-brand">
+                <svg class="footer-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#00ff41" stroke-width="3"/>
+                    <text x="50" y="68" font-size="50" text-anchor="middle" fill="#00ff41" font-weight="bold">S</text>
+                </svg>
+                <h4>SUDOCHOP LLC</h4>
+            </div>
+            <p>AI-Powered Business Development Solutions</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">© 2026 SUDOCHOP LLC. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add entrance animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.platform-card, .quick-links').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
