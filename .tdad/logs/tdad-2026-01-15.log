@@ -1,0 +1,26 @@
+
+================================================================================
+TDAD Session Started: 2026-01-15T02:17:35.062Z
+================================================================================
+[2026-01-15T02:17:35.296Z] [EXTENSION] 🚀 TDAD extension is now ACTIVATED! Version with comprehensive logging
+[2026-01-15T02:17:35.297Z] [EXTENSION] 📁 Log file location: /internal-storage/VScode/Business Development/.tdad/logs/tdad-2026-01-15.log
+[2026-01-15T02:17:35.297Z] [EXTENSION] 📊 Workspace folders: /internal-storage/VScode/Business Development, /internal-storage/CSV Data Aggregator
+[2026-01-15T02:17:35.298Z] [EXTENSION] Creating WorkflowController...
+[2026-01-15T02:17:35.299Z] [EXTENSION] MVP: Using simple JSON storage (.tdad/workflows/workflow.json)
+[2026-01-15T02:17:35.299Z] [EXTENSION] TDAD Extension activated successfully
+[2026-01-15T02:17:35.300Z] [EXTENSION] Registering commands...
+[2026-01-15T02:17:35.311Z] [EXTENSION] TDAD structure already initialized
+[2026-01-15T02:17:35.312Z] [EXTENSION] Auto-opening TDAD Canvas...
+[2026-01-15T02:17:35.315Z] [CANVAS] Created directory: /internal-storage/VScode/Business Development/.tdad/workflows
+[2026-01-15T02:17:35.317Z] [CANVAS] Sprint 13: Agent Orchestrator initialized
+[2026-01-15T02:17:35.318Z] [CANVAS] [AUTOPILOT DEBUG] Loading beta code from config: none
+[2026-01-15T02:17:35.319Z] [CANVAS] [AUTOPILOT DEBUG] Sending autopilot settings with loadNodes: no
+[2026-01-15T02:17:35.418Z] [CANVAS] WEBVIEW
+Data: Using stylesheets: index-CqP4kAre.css
+[2026-01-15T02:17:35.420Z] [CANVAS] MVP: Canvas initialized with simple JSON storage
+[2026-01-15T02:17:36.057Z] [CANVAS] [FitView] isLoading=true, nodes.length=0, folderId=null
+[2026-01-15T02:17:36.191Z] [CANVAS] [FitView] isLoading=false, nodes.length=0, folderId=null
+
+================================================================================
+TDAD Session Started: 2026-01-15T03:18:40.101Z
+================================================================================
