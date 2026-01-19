@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Neon Cyberpunk Theme -->
+    <color name="neon_purple">#9D4EDD</color>
+    <color name="neon_pink">#FF006E</color>
+    <color name="neon_cyan">#00F5FF</color>
+    <color name="neon_green">#39FF14</color>
+    <color name="neon_orange">#FF6B35</color>
+    <color name="neon_yellow">#FFE500</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#667EEA</color>
+    <color name="gradient_end">#764BA2</color>
+    
+    <!-- Dark Theme -->
+    <color name="dark_bg">#0D0D1A</color>
+    <color name="dark_surface">#1A1A2E</color>
+    <color name="dark_card">#16213E</color>
+    
+    <!-- Text -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+    
+    <!-- Status -->
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FF9800</color>
+    <color name="error">#F44336</color>
+</resources>
