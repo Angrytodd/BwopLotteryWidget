@@ -1,0 +1,30 @@
+{
+  "name": "bwop-lottery-intelligence",
+  "version": "3.0.0",
+  "description": "BWOP Lottery Intelligence Platform - Enhanced with IDA, PRNG, and Checksum Verification",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "npx serve -l 3000",
+    "open": "node -e \"require('child_process').exec('open http://localhost:3000 || xdg-open http://localhost:3000 || start http://localhost:3000')\""
+  },
+  "keywords": [
+    "lottery",
+    "prediction",
+    "AI",
+    "PRNG",
+    "IDA",
+    "checksum",
+    "analytics"
+  ],
+  "author": "Louis Walker / BWOP AI Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Angrytodd/Huthut"
+  }
+}
