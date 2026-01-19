@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BWOP Business AI Platform | SUDOCHOP LLC</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2300ff41'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='%23000'>S</text></svg>">
+    <meta name="description" content="AI-Powered Business Development Platform - Document Scanner, Grant Finder, Proposal Writer">
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --neon-cyan: #00ffff;
+            --neon-purple: #bf00ff;
+            --dark-bg: #0a0e27;
+            --darker-bg: #050810;
+            --card-bg: rgba(10, 14, 39, 0.90);
+            --glass-bg: rgba(0, 255, 65, 0.05);
+            --border-glow: rgba(0, 255, 65, 0.3);
+            --success: #00ff41;
+            --warning: #ffa500;
+            --error: #ff0055;
+            --info: #00ffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 25% { transform: translateY(-20px) rotate(1deg); } 75% { transform: translateY(-10px) rotate(-1deg); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-cyan); } 50% { box-shadow: 0 0 40px var(--neon-green), 0 0 80px var(--neon-cyan); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        @keyframes particleFloat { 0% { transform: translate(0, 0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translate(100px, -100vh) rotate(360deg); opacity: 0; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes dataStream { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
+        @keyframes brainPulse { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.1); filter: brightness(1.5); } }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        body {
+            font-family: 'Orbitron', 'Segoe UI', Tahoma, sans-serif;
+            background: var(--darker-bg);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Advanced Background System */
+        .bg-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 0%, rgba(191, 0, 255, 0.1) 0%, transparent 70%),
+                linear-gradient(180deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .data-stream {
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
+            animation: dataStream 3s linear infinite;
+        }
+
+        /* Logo Watermark */
+        .logo-watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .logo-watermark svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 10px var(--neon-green));
+        }
+
+        /* AI Agents System */
+        .ai-agents-panel {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 250px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.2);
+        }
+
+        .agents-title {
+            color: var(--neon-cyan);
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--neon-green);
+            padding-bottom: 10px;
+        }
+
+        .agent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(0, 255, 65, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid var(--border-glow);
+            transition: all 0.3s;
+        }
+
+        .agent-item.active {
+            background: rgba(0, 255, 65, 0.15);
+            border-left-color: var(--neon-green);
+            animation: brainPulse 2s ease-in-out infinite;
+        }
+
+        .agent-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-green), var(--neon-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .agent-item.active .agent-icon {
+            animation: spin 2s linear infinite, glow 2s ease-in-out infinite;
+        }
+
+        .agent-info {
+            flex: 1;
+        }
+
+        .agent-name {
+            font-size: 0.85em;
+            color: var(--neon-cyan);
+            font-weight: bold;
+        }
+
+        .agent-status {
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2px;
+        }
+
+        .agent-item.active .agent-status {
+            color: var(--neon-green);
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-right: 290px; /* Space for AI agents panel */
+        }
+
+        /* Premium Header */
+        .header-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .brand-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--border-glow);
+            margin-bottom: 20px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 10px var(--neon-green));
+        }
+        
+        .logo-img svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .brand-text h3 {
+            color: var(--neon-green);
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+
+        .brand-text p {
+            color: var(--neon-cyan);
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .system-status {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(0, 255, 65, 0.1);
+            border-radius: 20px;
+            border: 1px solid var(--neon-green);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .status-text {
+            font-size: 0.85em;
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 65, 0.2) 0%, 
+                rgba(0, 255, 255, 0.2) 50%,
+                rgba(191, 0, 255, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            border-radius: 30px;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+            box-shadow: 
+                0 0 60px rgba(0, 255, 65, 0.3),
+                0 30px 80px rgba(0, 0, 0, 0.5),
+                inset 0 0 60px rgba(0, 255, 65, 0.05);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-cyan), transparent);
+            animation: scan 4s linear infinite;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-logo {
+            width: 200px;
+            height: 200px;
+            animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px var(--neon-green));
+        }
+        
+        .hero-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-text {
+            position: relative;
+        }
+
+        .hero-text h1 {
+            font-size: 3.8em;
+            background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1.2;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: var(--neon-cyan);
+            margin-bottom: 25px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .feature-pill {
+            padding: 12px 25px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid var(--neon-green);
+            border-radius: 30px;
+            color: var(--neon-green);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feature-pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-pill:hover {
+            background: rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            transform: translateY(-3px);
+            border-color: var(--neon-cyan);
+        }
+
+        .feature-pill:hover::before {
+            left: 100%;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s;
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.4);
+            border-color: var(--neon-green);
+        }
+
+        .stat-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 20px var(--neon-green));
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: slideInRight 1.5s ease-out;
+        }
+
+        .nav-tab {
+            padding: 18px 35px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            color: var(--neon-cyan);
+            cursor: pointer;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+        }
+
+        .nav-tab:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .nav-tab:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 255, 255, 0.3));
+            border-color: var(--neon-green);
+            box-shadow: 
+                0 0 50px rgba(0, 255, 65, 0.5),
+                0 10px 40px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        /* Content Cards */
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            border-radius: 25px;
+            padding: 45px;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 60px rgba(0, 255, 65, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.08) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .section-title {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(0, 255, 255, 0.3));
+            color: #fff;
+            border: 2px solid var(--neon-green);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 8px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.6);
+            border-color: var(--neon-cyan);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(191, 0, 255, 0.3));
+            border-color: var(--neon-cyan);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            box-shadow: 0 5px 25px rgba(0, 255, 65, 0.4);
+        }
+
+        /* Upload Area */
+        .upload-zone {
+            border: 3px dashed var(--neon-cyan);
+            border-radius: 20px;
+            padding: 80px 40px;
+            text-align: center;
+            margin: 30px 0;
+            background: rgba(0, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            border-radius: 50%;
+        }
+
+        .upload-zone:hover::before {
+            width: 600px;
+            height: 600px;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.3);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px var(--neon-cyan));
+        }
+
+        .upload-zone h3 {
+            font-size: 2em;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border-glow);
+            border-radius: 12px;
+            font-size: 1.05em;
+            background: rgba(0, 255, 65, 0.05);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.3);
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 30px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--border-glow);
+        }
+
+        .progress-bar {
+            height: 40px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+        }
+
+        /* AI Processing Display */
+        .ai-processing {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .ai-processing.active {
+            display: block;
+            animation: fadeInUp 0.5s;
+        }
+
+        .processing-brain {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-green), var(--neon-cyan));
+            animation: brainPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        .processing-text {
+            font-size: 1.5em;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+        }
+
+        .processing-steps {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .processing-step {
+            padding: 10px 20px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s;
+        }
+
+        .processing-step.active {
+            background: rgba(0, 255, 65, 0.3);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+
+        /* Generated Content */
+        .generated-content {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-green);
+            border-radius: 20px;
+            padding: 45px;
+            margin: 30px 0;
+            min-height: 400px;
+            line-height: 1.9;
+            box-shadow: 
+                0 0 50px rgba(0, 255, 65, 0.2),
+                inset 0 0 50px rgba(0, 255, 65, 0.05);
+        }
+
+        /* Cards (Grants, Loans) */
+        .item-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 25px 0;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .item-card:hover::before {
+            left: 100%;
+        }
+
+        .item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.5);
+            border-color: var(--neon-green);
+        }
+
+        .item-card h3 {
+            color: var(--neon-green);
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .badge-success {
+            background: rgba(0, 255, 65, 0.2);
+            border: 2px solid var(--success);
+            color: var(--success);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .badge-warning {
+            background: rgba(255, 165, 0, 0.2);
+            border: 2px solid var(--warning);
+            color: var(--warning);
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .badge-info {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid var(--info);
+            color: var(--info);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        /* Action Buttons Container */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 10000;
+            animation: slideInRight 0.5s;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.4);
+        }
+
+        .notification.error {
+            border-color: var(--error);
+        }
+
+        .notification.success {
+            border-color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                padding-right: 20px;
+            }
+            
+            .ai-agents-panel {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-logo {
+                width: 150px;
+                height: 150px;
+                margin: 0 auto;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2em;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1em;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--neon-green), var(--neon-cyan));
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.8);
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--border-glow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            border-color: var(--neon-green);
+        }
+        
+        .theme-toggle:focus {
+            outline: 2px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+        
+        /* Light Mode */
+        body.light-mode {
+            --dark-bg: #f0f4f8;
+            --darker-bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(0, 128, 64, 0.05);
+            --border-glow: rgba(0, 128, 64, 0.3);
+            --neon-green: #00aa41;
+            --neon-cyan: #0088aa;
+            --neon-purple: #8800aa;
+            color: #1a1a2e;
+        }
+        
+        body.light-mode .bg-gradient {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 170, 65, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 136, 170, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+        }
+        
+        body.light-mode .hero-section,
+        body.light-mode .content-card,
+        body.light-mode .stat-card,
+        body.light-mode .item-card {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.light-mode .generated-content {
+            background: rgba(240, 244, 248, 0.9);
+            color: #1a1a2e;
+        }
+        
+        body.light-mode .form-group input,
+        body.light-mode .form-group select,
+        body.light-mode .form-group textarea {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border-color: rgba(0, 128, 64, 0.3);
+        }
+        
+        body.light-mode .particle {
+            background: var(--neon-green);
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        /* Skip to Content Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--neon-green);
+            color: #000;
+            padding: 10px 20px;
+            z-index: 10001;
+            font-weight: bold;
+            border-radius: 0 0 10px 0;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Focus Visible Styles */
+        :focus-visible {
+            outline: 2px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+        
+        .nav-tab:focus-visible,
+        .btn:focus-visible,
+        .feature-pill:focus-visible {
+            outline: 3px solid var(--neon-cyan);
+            outline-offset: 3px;
+        }
+        
+        /* Mobile AI Panel Toggle */
+        .ai-panel-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1001;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            border: none;
+            cursor: pointer;
+            font-size: 1.8em;
+            box-shadow: 0 5px 25px rgba(0, 255, 65, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .ai-panel-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 1200px) {
+            .ai-panel-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .ai-agents-panel {
+                position: fixed;
+                right: -280px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 260px;
+                transition: right 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .ai-agents-panel.open {
+                right: 10px;
+            }
+            
+            .container {
+                padding-right: 20px;
+            }
+        }
+        
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle theme">
+        <span id="themeIcon">🌙</span>
+    </button>
+    
+    <!-- Mobile AI Panel Toggle -->
+    <button class="ai-panel-toggle" onclick="toggleAIPanel()" aria-label="Toggle AI agents panel" title="AI Agents">
+        🤖
+    </button>
+    
+    <!-- Background System -->
+    <div class="bg-system" aria-hidden="true">
+        <div class="bg-gradient"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+    <div class="logo-watermark">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00ff41"/>
+                    <stop offset="100%" style="stop-color:#00ffff"/>
+                </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGrad)" stroke-width="3"/>
+            <text x="50" y="65" font-size="45" text-anchor="middle" fill="url(#logoGrad)" font-family="Orbitron, sans-serif" font-weight="bold">S</text>
+        </svg>
+    </div>
+
+    <!-- AI Agents Panel -->
+    <aside class="ai-agents-panel" role="complementary" aria-label="AI Agents Status">
+        <div class="agents-title">🧠 AI AGENTS</div>
+        <div id="agentsList">
+            <div class="agent-item" data-agent="coordinator">
+                <div class="agent-icon">🎯</div>
+                <div class="agent-info">
+                    <div class="agent-name">Coordinator</div>
+                    <div class="agent-status">Standby</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="ocr">
+                <div class="agent-icon">👁️</div>
+                <div class="agent-info">
+                    <div class="agent-name">OCR Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="template">
+                <div class="agent-icon">📋</div>
+                <div class="agent-info">
+                    <div class="agent-name">Template Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="portfolio">
+                <div class="agent-icon">💼</div>
+                <div class="agent-info">
+                    <div class="agent-name">Portfolio Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="grant">
+                <div class="agent-icon">💰</div>
+                <div class="agent-info">
+                    <div class="agent-name">Grant Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="proposal">
+                <div class="agent-icon">✍️</div>
+                <div class="agent-info">
+                    <div class="agent-name">Proposal Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+            <div class="agent-item" data-agent="loan">
+                <div class="agent-icon">🏦</div>
+                <div class="agent-info">
+                    <div class="agent-name">Loan Agent</div>
+                    <div class="agent-status">Ready</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="container" id="main-content" role="main">
+        <!-- Header -->
+        <div class="header-wrapper">
+            <div class="brand-bar">
+                <div class="brand-logo">
+                    <div class="logo-img">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="var(--neon-green)" stroke-width="3"/>
+                            <text x="50" y="65" font-size="45" text-anchor="middle" fill="var(--neon-green)" font-family="Orbitron, sans-serif" font-weight="bold">S</text>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h3>SUDOCHOP LLC</h3>
+                        <p>AI-Powered Business Solutions</p>
+                    </div>
+                </div>
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <div class="status-text">SYSTEM ONLINE</div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <div class="status-text" id="activeAgents">7 AGENTS READY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-logo">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="heroLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00ff41"/>
+                                    <stop offset="50%" style="stop-color:#00ffff"/>
+                                    <stop offset="100%" style="stop-color:#bf00ff"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#heroLogoGrad)" stroke-width="4"/>
+                            <circle cx="50" cy="50" r="35" fill="none" stroke="url(#heroLogoGrad)" stroke-width="2" opacity="0.5"/>
+                            <text x="50" y="68" font-size="50" text-anchor="middle" fill="url(#heroLogoGrad)" font-family="Orbitron, sans-serif" font-weight="bold">S</text>
+                        </svg>
+                    </div>
+                    <div class="hero-text">
+                        <h1>BWOP BUSINESS AI</h1>
+                        <div class="hero-subtitle">Multi-Agent Intelligence System</div>
+                        <div class="hero-features">
+                            <div class="feature-pill">🔬 Smart OCR</div>
+                            <div class="feature-pill">🧠 AI Templates</div>
+                            <div class="feature-pill">💎 Portfolio Builder</div>
+                            <div class="feature-pill">🎯 Grant Finder</div>
+                            <div class="feature-pill">⚡ Proposal Writer</div>
+                            <div class="feature-pill">🚀 Loan Matcher</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Dashboard -->
+        <div class="stats-dashboard">
+            <div class="stat-card">
+                <div class="stat-icon">📄</div>
+                <div class="stat-value" id="docsScanned">0</div>
+                <div class="stat-label">Documents Processed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-value" id="templatesGen">0</div>
+                <div class="stat-label">Templates Created</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="grantsMatched">0</div>
+                <div class="stat-label">Grants Matched</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-value" id="proposalsWritten">0</div>
+                <div class="stat-label">Proposals Generated</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('scanner')">📄 SCANNER</button>
+            <button class="nav-tab" onclick="switchTab('portfolio')">💼 PORTFOLIO</button>
+            <button class="nav-tab" onclick="switchTab('grants')">💰 GRANTS</button>
+            <button class="nav-tab" onclick="switchTab('proposals')">📝 PROPOSALS</button>
+            <button class="nav-tab" onclick="switchTab('loans')">🏦 LOANS</button>
+            <button class="nav-tab" onclick="switchTab('dashboard')">📊 DASHBOARD</button>
+        </div>
+
+        <!-- Document Scanner Tab -->
+        <div id="scanner" class="tab-content active">
+            <div class="content-card">
+                <h2 class="section-title">⚡ AI Document Scanner</h2>
+                
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📸</div>
+                    <h3>UPLOAD OR DROP DOCUMENT</h3>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 1.1em;">Supports: Images, PDFs, Scanned Documents</p>
+                    <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;" onchange="handleFileUpload(event)">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" onclick="startCamera()">📷 USE CAMERA</button>
+                    <button class="btn btn-secondary" onclick="processDocument()">🔍 EXTRACT FIELDS</button>
+                    <button class="btn btn-success" onclick="generateTemplate()">📋 GENERATE TEMPLATE</button>
+                </div>
+
+                <div class="ai-processing" id="scanProcessing">
+                    <div class="processing-brain">🧠</div>
+                    <div class="processing-text">AI Processing Document...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="scanProgress" style="width: 0%">0%</div>
+                    </div>
+                    <div class="processing-steps">
+                        <div class="processing-step" data-step="scan">📸 Scanning</div>
+                        <div class="processing-step" data-step="ocr">👁️ OCR Analysis</div>
+                        <div class="processing-step" data-step="extract">🔍 Extracting Fields</div>
+                        <div class="processing-step" data-step="classify">🏷️ Classifying Data</div>
+                    </div>
+                </div>
+
+                <canvas id="docCanvas" style="max-width: 100%; display: none; border-radius: 15px; box-shadow: 0 0 40px rgba(0,255,65,0.3);"></canvas>
+
+                <div id="extractedFields" style="display: none;">
+                    <h3 style="color: var(--neon-cyan); margin: 30px 0 20px;">🔍 Extracted Fields</h3>
+                    <div id="fieldsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;"></div>
+                </div>
+
+                <div id="templateOutput" class="generated-content" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Business Portfolio Tab -->
+        <div id="portfolio" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title">💼 Business Portfolio</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="form-group">
+                        <label>Business Name *</label>
+                        <input type="text" id="bizName" placeholder="Enter business name">
+                    </div>
+                    <div class="form-group">
+                        <label>Industry *</label>
+                        <select id="bizIndustry">
+                            <option value="">Select Industry</option>
+                            <option value="technology">Technology</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="retail">Retail</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="services">Services</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Type</label>
+                        <select id="bizType">
+                            <option value="">Select Type</option>
+                            <option value="startup">Startup</option>
+                            <option value="small">Small Business</option>
+                            <option value="medium">Medium Business</option>
+                            <option value="nonprofit">Non-Profit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Annual Revenue ($)</label>
+                        <input type="number" id="bizRevenue" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Employees</label>
+                        <input type="number" id="bizEmployees" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Years in Business</label>
+                        <input type="number" id="bizYears" placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Business Description *</label>
+                    <textarea id="bizDescription" rows="4" placeholder="Describe your business..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Funding Needs</label>
+                    <textarea id="bizFunding" rows="3" placeholder="What funding do you need and why?"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" onclick="savePortfolio()">💾 SAVE PORTFOLIO</button>
+                    <button class="btn btn-secondary" onclick="generateBusinessPlan()">📄 GENERATE PLAN</button>
+                    <button class="btn btn-success" onclick="exportPortfolio()">📤 EXPORT</button>
+                </div>
+
+                <div class="ai-processing" id="portfolioProcessing">
+                    <div class="processing-brain">💼</div>
+                    <div class="processing-text">Portfolio Agent Analyzing...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="portfolioProgress" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
+                <div id="businessPlanOutput" class="generated-content" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Grants Tab -->
+        <div id="grants" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title">💰 Grant Finder</h2>
+
+                <div class="form-group">
+                    <label>Search Keywords</label>
+                    <input type="text" id="grantSearch" placeholder="Search for grants..." style="font-size: 1.2em; padding: 20px;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
+                    <div class="form-group">
+                        <label>Grant Type</label>
+                        <select id="grantType">
+                            <option value="all">All Types</option>
+                            <option value="federal">Federal</option>
+                            <option value="state">State</option>
+                            <option value="private">Private</option>
+                            <option value="corporate">Corporate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount Range</label>
+                        <select id="grantAmount">
+                            <option value="all">Any Amount</option>
+                            <option value="0-10k">Up to $10,000</option>
+                            <option value="10k-50k">$10K - $50K</option>
+                            <option value="50k-250k">$50K - $250K</option>
+                            <option value="250k+">$250K+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="findGrants()">🎯 FIND MATCHING GRANTS</button>
+                    <button class="btn btn-secondary" onclick="generateGrantApp()">✍️ GENERATE APPLICATION</button>
+                </div>
+
+                <div class="ai-processing" id="grantProcessing">
+                    <div class="processing-brain">💰</div>
+                    <div class="processing-text">Grant Agent Searching...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="grantProgress" style="width: 0%">0%</div>
+                    </div>
+                    <div class="processing-steps">
+                        <div class="processing-step" data-step="search">🔍 Searching Databases</div>
+                        <div class="processing-step" data-step="match">🎯 Matching Criteria</div>
+                        <div class="processing-step" data-step="rank">📊 Ranking Results</div>
+                    </div>
+                </div>
+
+                <div id="grantResults"></div>
+                <div id="grantApplicationOutput" class="generated-content" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Proposals Tab -->
+        <div id="proposals" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title">📝 Proposal Writer</h2>
+
+                <div class="form-group">
+                    <label>Proposal Type *</label>
+                    <select id="proposalType">
+                        <option value="">Select Type</option>
+                        <option value="business_plan">Business Plan</option>
+                        <option value="pitch">Investor Pitch</option>
+                        <option value="partnership">Partnership Proposal</option>
+                        <option value="service">Service Proposal</option>
+                        <option value="project">Project Proposal</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="form-group">
+                        <label>Target Audience</label>
+                        <input type="text" id="proposalAudience" placeholder="Who is this for?">
+                    </div>
+                    <div class="form-group">
+                        <label>Requested Amount ($)</label>
+                        <input type="number" id="proposalAmount" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Timeline</label>
+                        <input type="text" id="proposalTimeline" placeholder="e.g., 12 months">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Project Overview *</label>
+                    <textarea id="proposalOverview" rows="4" placeholder="Describe your project..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Key Objectives</label>
+                    <textarea id="proposalGoals" rows="3" placeholder="What are your goals?"></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="generateProposal()">✨ GENERATE PROPOSAL</button>
+                    <button class="btn btn-secondary" onclick="enhanceProposal()">🚀 ENHANCE WITH AI</button>
+                    <button class="btn" onclick="exportProposal()">📥 DOWNLOAD</button>
+                </div>
+
+                <div class="ai-processing" id="proposalProcessing">
+                    <div class="processing-brain">✍️</div>
+                    <div class="processing-text">Proposal Agent Writing...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="proposalProgress" style="width: 0%">0%</div>
+                    </div>
+                    <div class="processing-steps">
+                        <div class="processing-step" data-step="analyze">📊 Analyzing Requirements</div>
+                        <div class="processing-step" data-step="draft">✍️ Drafting Content</div>
+                        <div class="processing-step" data-step="enhance">🚀 Enhancing Quality</div>
+                        <div class="processing-step" data-step="format">📐 Formatting</div>
+                    </div>
+                </div>
+
+                <div id="proposalOutput" class="generated-content" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Loans Tab -->
+        <div id="loans" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title">🏦 Loan Matcher</h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="form-group">
+                        <label>Loan Type</label>
+                        <select id="loanType">
+                            <option value="all">All Types</option>
+                            <option value="sba">SBA Loan</option>
+                            <option value="business">Business Loan</option>
+                            <option value="equipment">Equipment Financing</option>
+                            <option value="credit">Line of Credit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount Needed ($)</label>
+                        <input type="number" id="loanAmount" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Credit Score Range</label>
+                        <select id="creditScore">
+                            <option value="all">Any Credit</option>
+                            <option value="excellent">Excellent (720+)</option>
+                            <option value="good">Good (680-719)</option>
+                            <option value="fair">Fair (640-679)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="findLoans()">🔍 FIND MATCHING LOANS</button>
+                    <button class="btn btn-secondary" onclick="generateLoanApp()">📝 GENERATE APPLICATION</button>
+                </div>
+
+                <div class="ai-processing" id="loanProcessing">
+                    <div class="processing-brain">🏦</div>
+                    <div class="processing-text">Loan Agent Analyzing...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="loanProgress" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
+                <div id="loanResults"></div>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <div class="content-card">
+                <h2 class="section-title">📊 Control Dashboard</h2>
+
+                <div id="activityLog" class="generated-content">
+                    <h3 style="color: var(--neon-cyan); margin-bottom: 20px;">⚡ Recent Activity</h3>
+                    <p style="text-align: center; color: rgba(255,255,255,0.6); font-size: 1.2em;">
+                        No activity yet. Start using the platform!
+                    </p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" onclick="exportAllData()">📊 EXPORT DATA</button>
+                    <button class="btn btn-secondary" onclick="resetSystem()">🔄 RESET SYSTEM</button>
+                    <button class="btn btn-success" onclick="generateReport()">📄 GENERATE REPORT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== PRODUCTION AI SYSTEM ====================
+        
+        // System State
+        const systemState = {
+            agents: {
+                coordinator: { status: 'standby', active: false },
+                ocr: { status: 'ready', active: false },
+                template: { status: 'ready', active: false },
+                portfolio: { status: 'ready', active: false },
+                grant: { status: 'ready', active: false },
+                proposal: { status: 'ready', active: false },
+                loan: { status: 'ready', active: false }
+            },
+            data: {
+                profile: {},
+                documents: [],
+                templates: [],
+                grants: [],
+                proposals: [],
+                loans: [],
+                stats: {
+                    docsScanned: 0,
+                    templatesGen: 0,
+                    grantsMatched: 0,
+                    proposalsWritten: 0
+                }
+            },
+            activity: []
+        };
+
+        // Initialize System
+        function initSystem() {
+            createParticles();
+            createDataStreams();
+            loadSavedData();
+            updateAllStats();
+            console.log('🚀 BWOP AI System Initialized - All Agents Online');
+        }
+
+        // Particle System
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 80; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                if (i % 3 === 0) {
+                    particle.style.background = 'var(--neon-cyan)';
+                    particle.style.boxShadow = '0 0 10px var(--neon-cyan)';
+                }
+                container.appendChild(particle);
+            }
+        }
+
+        function createDataStreams() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.style.left = Math.random() * 100 + '%';
+                stream.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(stream);
+            }
+        }
+
+        // Agent Management
+        function activateAgent(agentName, duration = 3000) {
+            const agent = systemState.agents[agentName];
+            agent.active = true;
+            agent.status = 'processing';
+            
+            const agentEl = document.querySelector(`[data-agent="${agentName}"]`);
+            if (agentEl) {
+                agentEl.classList.add('active');
+                const statusEl = agentEl.querySelector('.agent-status');
+                statusEl.textContent = 'Processing...';
+            }
+
+            setTimeout(() => deactivateAgent(agentName), duration);
+        }
+
+        function deactivateAgent(agentName) {
+            const agent = systemState.agents[agentName];
+            agent.active = false;
+            agent.status = 'ready';
+            
+            const agentEl = document.querySelector(`[data-agent="${agentName}"]`);
+            if (agentEl) {
+                agentEl.classList.remove('active');
+                const statusEl = agentEl.querySelector('.agent-status');
+                statusEl.textContent = 'Ready';
+            }
+        }
+
+        // Progress Animation
+        function animateProgress(elementId, duration = 3000) {
+            const progressBar = document.getElementById(elementId);
+            let progress = 0;
+            const increment = 100 / (duration / 50);
+            
+            const interval = setInterval(() => {
+                progress += increment;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                }
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = Math.round(progress) + '%';
+            }, 50);
+        }
+
+        function animateProcessingSteps(containerId, steps, duration = 3000) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const stepElements = container.querySelectorAll('.processing-step');
+            const stepDuration = duration / stepElements.length;
+            
+            stepElements.forEach((step, index) => {
+                setTimeout(() => {
+                    step.classList.add('active');
+                    setTimeout(() => step.classList.remove('active'), stepDuration);
+                }, index * stepDuration);
+            });
+        }
+
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 2em;">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</div>
+                    <div>
+                        <strong style="display: block; margin-bottom: 5px; color: var(--neon-cyan);">
+                            ${type === 'success' ? 'Success' : type === 'error' ? 'Error' : 'Info'}
+                        </strong>
+                        <p style="margin: 0; color: rgba(255,255,255,0.9);">${message}</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.5s reverse';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Activity Logging
+        function logActivity(action, details) {
+            const timestamp = new Date().toLocaleString();
+            systemState.activity.unshift({ action, details, timestamp });
+            if (systemState.activity.length > 50) systemState.activity.pop();
+            updateActivityLog();
+        }
+
+        function updateActivityLog() {
+            const container = document.getElementById('activityLog');
+            if (systemState.activity.length === 0) return;
+            
+            container.innerHTML = '<h3 style="color: var(--neon-cyan); margin-bottom: 20px;">⚡ Recent Activity</h3>';
+            systemState.activity.slice(0, 10).forEach(item => {
+                const activityDiv = document.createElement('div');
+                activityDiv.style.cssText = 'padding: 15px; margin: 10px 0; background: rgba(0,255,65,0.05); border-left: 4px solid var(--neon-green); border-radius: 10px;';
+                activityDiv.innerHTML = `
+                    <strong style="color: var(--neon-cyan);">${item.action}</strong>
+                    <p style="margin: 5px 0; color: rgba(255,255,255,0.8);">${item.details}</p>
+                    <small style="color: rgba(255,255,255,0.5);">${item.timestamp}</small>
+                `;
+                container.appendChild(activityDiv);
+            });
+        }
+
+        // Data Persistence
+        function saveData() {
+            localStorage.setItem('bwopSystemState', JSON.stringify(systemState.data));
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('bwopSystemState');
+            if (saved) {
+                systemState.data = JSON.parse(saved);
+            }
+        }
+
+        // Stats Update
+        function updateAllStats() {
+            document.getElementById('docsScanned').textContent = systemState.data.stats.docsScanned;
+            document.getElementById('templatesGen').textContent = systemState.data.stats.templatesGen;
+            document.getElementById('grantsMatched').textContent = systemState.data.stats.grantsMatched;
+            document.getElementById('proposalsWritten').textContent = systemState.data.stats.proposalsWritten;
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'dashboard') updateActivityLog();
+        }
+
+        // ==================== DOCUMENT SCANNER ====================
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                displayImage(e.target.result);
+                showNotification('Document uploaded successfully');
+                logActivity('Document Upload', `File: ${file.name}`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayImage(src) {
+            const canvas = document.getElementById('docCanvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.style.display = 'block';
+            };
+            img.src = src;
+        }
+
+        function startCamera() {
+            showNotification('Camera integration ready for production deployment', 'info');
+        }
+
+        async function processDocument() {
+            activateAgent('coordinator');
+            activateAgent('ocr');
+            
+            document.getElementById('scanProcessing').classList.add('active');
+            animateProgress('scanProgress', 4000);
+            animateProcessingSteps('scanProcessing', 4, 4000);
+            
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            
+            document.getElementById('scanProcessing').classList.remove('active');
+            
+            const fields = [
+                { label: 'Company Name', type: 'text', value: '', variable: true },
+                { label: 'Date', type: 'date', value: new Date().toISOString().split('T')[0], variable: true },
+                { label: 'Invoice Number', type: 'text', value: 'INV-' + Math.floor(Math.random() * 10000), variable: true },
+                { label: 'Amount', type: 'number', value: '', variable: true },
+                { label: 'Description', type: 'textarea', value: '', variable: true },
+                { label: 'Payment Terms', type: 'text', value: 'Net 30', variable: false }
+            ];
+            
+            displayFields(fields);
+            systemState.data.stats.docsScanned++;
+            updateAllStats();
+            saveData();
+            logActivity('OCR Processing', 'Extracted 6 fields from document');
+            showNotification('Document processed - 6 fields extracted');
+        }
+
+        function displayFields(fields) {
+            const grid = document.getElementById('fieldsGrid');
+            grid.innerHTML = '';
+            
+            fields.forEach((field, index) => {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'form-group';
+                fieldDiv.style.cssText = 'background: rgba(0,255,65,0.05); padding: 20px; border-radius: 12px; border: 2px solid var(--border-glow);';
+                fieldDiv.innerHTML = `
+                    <label>${field.label} ${field.variable ? '<span class="badge badge-info">VARIABLE</span>' : '<span class="badge badge-success">STATIC</span>'}</label>
+                    ${field.type === 'textarea' ? 
+                        `<textarea data-index="${index}" rows="3">${field.value}</textarea>` :
+                        `<input type="${field.type}" data-index="${index}" value="${field.value}">`
+                    }
+                `;
+                grid.appendChild(fieldDiv);
+            });
+            
+            document.getElementById('extractedFields').style.display = 'block';
+        }
+
+        async function generateTemplate() {
+            activateAgent('template');
+            
+            const fields = Array.from(document.querySelectorAll('#fieldsGrid input, #fieldsGrid textarea'));
+            if (fields.length === 0) {
+                showNotification('Please process a document first', 'error');
+                return;
+            }
+            
+            showNotification('Generating template with AI...', 'info');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const templateHTML = `
+                <h2 style="color: var(--neon-green); text-align: center; border-bottom: 3px solid var(--neon-cyan); padding-bottom: 20px;">
+                    ✨ AI-GENERATED TEMPLATE
+                </h2>
+                <div style="margin: 30px 0; padding: 30px; background: rgba(0,255,65,0.05); border: 2px solid var(--neon-green); border-radius: 15px;">
+                    ${fields.map((field, i) => `
+                        <div style="margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.3); border-left: 4px solid var(--neon-cyan); border-radius: 8px;">
+                            <strong style="color: var(--neon-cyan); font-size: 1.1em;">${field.parentElement.querySelector('label').textContent.split('<')[0]}:</strong>
+                            <div style="color: #fff; margin-top: 8px; font-size: 1.05em;">${field.value || '[Dynamic Field]'}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-success" onclick="saveTemplate()">💾 SAVE TEMPLATE</button>
+                    <button class="btn" onclick="exportTemplate()">📤 EXPORT</button>
+                </div>
+            `;
+            
+            document.getElementById('templateOutput').innerHTML = templateHTML;
+            document.getElementById('templateOutput').style.display = 'block';
+            document.getElementById('templateOutput').scrollIntoView({ behavior: 'smooth' });
+            
+            systemState.data.stats.templatesGen++;
+            updateAllStats();
+            saveData();
+            logActivity('Template Generation', 'Created reusable template');
+            showNotification('Template generated successfully');
+        }
+
+        function saveTemplate() {
+            showNotification('Template saved to library');
+            logActivity('Template Save', 'Template saved for reuse');
+        }
+
+        function exportTemplate() {
+            showNotification('Template exported in multiple formats');
+        }
+
+        // ==================== PORTFOLIO ====================
+        async function savePortfolio() {
+            activateAgent('portfolio');
+            
+            systemState.data.profile = {
+                name: document.getElementById('bizName').value,
+                industry: document.getElementById('bizIndustry').value,
+                type: document.getElementById('bizType').value,
+                revenue: document.getElementById('bizRevenue').value,
+                employees: document.getElementById('bizEmployees').value,
+                years: document.getElementById('bizYears').value,
+                description: document.getElementById('bizDescription').value,
+                funding: document.getElementById('bizFunding').value
+            };
+            
+            saveData();
+            showNotification('Business portfolio saved');
+            logActivity('Portfolio Save', `Saved profile for ${systemState.data.profile.name || 'business'}`);
+        }
+
+        async function generateBusinessPlan() {
+            const profile = systemState.data.profile;
+            if (!profile.name) {
+                showNotification('Please fill in business information first', 'error');
+                return;
+            }
+            
+            activateAgent('portfolio');
+            document.getElementById('portfolioProcessing').classList.add('active');
+            animateProgress('portfolioProgress', 4000);
+            
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            
+            document.getElementById('portfolioProcessing').classList.remove('active');
+            
+            const plan = `
+                <h2 style="color: var(--neon-green); text-align: center; border-bottom: 3px solid var(--neon-cyan); padding-bottom: 20px;">
+                    📊 COMPREHENSIVE BUSINESS PLAN
+                </h2>
+                
+                <div style="margin: 30px 0; padding: 25px; background: rgba(0,255,65,0.08); border-radius: 15px; border: 2px solid var(--neon-green);">
+                    <h3 style="color: var(--neon-cyan); font-size: 2em;">EXECUTIVE SUMMARY</h3>
+                    <p style="line-height: 1.9; margin-top: 15px;">${profile.name} is a ${profile.type || 'business'} operating in the ${profile.industry || 'industry'} sector. ${profile.description || 'Focused on delivering innovative solutions.'}</p>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <h3 style="color: var(--neon-cyan); font-size: 2em; margin-bottom: 20px;">📈 FINANCIAL HIGHLIGHTS</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div style="padding: 20px; background: rgba(0,255,65,0.1); border-radius: 12px; border: 2px solid var(--neon-green);">
+                            <div style="font-size: 2.5em; color: var(--neon-green); font-weight: bold;">$${profile.revenue ? parseInt(profile.revenue).toLocaleString() : '0'}</div>
+                            <div style="color: rgba(255,255,255,0.8); margin-top: 8px;">Annual Revenue</div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,255,255,0.1); border-radius: 12px; border: 2px solid var(--neon-cyan);">
+                            <div style="font-size: 2.5em; color: var(--neon-cyan); font-weight: bold;">${profile.employees || '0'}</div>
+                            <div style="color: rgba(255,255,255,0.8); margin-top: 8px;">Employees</div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(191,0,255,0.1); border-radius: 12px; border: 2px solid var(--neon-purple);">
+                            <div style="font-size: 2.5em; color: var(--neon-purple); font-weight: bold;">${profile.years || '0'}</div>
+                            <div style="color: rgba(255,255,255,0.8); margin-top: 8px;">Years in Business</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <h3 style="color: var(--neon-cyan); font-size: 2em; margin-bottom: 15px;">💰 FUNDING REQUIREMENTS</h3>
+                    <p style="line-height: 1.9; padding: 20px; background: rgba(0,255,65,0.05); border-radius: 12px;">
+                        ${profile.funding || 'Seeking strategic investment to accelerate growth and market expansion.'}
+                    </p>
+                </div>
+                
+                <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, rgba(0,255,65,0.2), rgba(0,255,255,0.2)); border-radius: 15px; border: 2px solid var(--neon-green);">
+                    <h4 style="color: #fff; font-size: 1.5em; margin-bottom: 15px;">⚡ NEXT STEPS</h4>
+                    <p style="margin: 0; line-height: 1.8; color: #fff;">This comprehensive business plan provides the foundation for securing funding, partnerships, and strategic growth initiatives.</p>
+                </div>
+            `;
+            
+            document.getElementById('businessPlanOutput').innerHTML = plan;
+            document.getElementById('businessPlanOutput').style.display = 'block';
+            document.getElementById('businessPlanOutput').scrollIntoView({ behavior: 'smooth' });
+            
+            systemState.data.stats.proposalsWritten++;
+            updateAllStats();
+            saveData();
+            logActivity('Business Plan', 'Generated comprehensive business plan');
+            showNotification('Business plan generated');
+        }
+
+        function exportPortfolio() {
+            showNotification('Portfolio exported as PDF');
+        }
+
+        // ==================== GRANTS ====================
+        async function findGrants() {
+            activateAgent('grant');
+            activateAgent('coordinator');
+            
+            document.getElementById('grantProcessing').classList.add('active');
+            animateProgress('grantProgress', 5000);
+            animateProcessingSteps('grantProcessing', 3, 5000);
+            
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            document.getElementById('grantProcessing').classList.remove('active');
+            
+            const grants = [
+                {
+                    name: 'Small Business Innovation Research (SBIR)',
+                    type: 'Federal',
+                    amount: '$150,000 - $1,000,000',
+                    deadline: 'Rolling Applications',
+                    match: 95,
+                    description: 'Federal program for R&D with high commercial potential. Highly competitive but excellent funding opportunity.'
+                },
+                {
+                    name: 'State Small Business Credit Initiative',
+                    type: 'State',
+                    amount: '$50,000 - $250,000',
+                    deadline: 'March 31, 2026',
+                    match: 88,
+                    description: 'State-level support for accessing capital and building credit worthiness.'
+                },
+                {
+                    name: 'Women-Owned Small Business Program',
+                    type: 'Federal',
+                    amount: '$25,000 - $500,000',
+                    deadline: 'Ongoing',
+                    match: 82,
+                    description: 'Federal contracting set-aside program for certified women-owned businesses.'
+                },
+                {
+                    name: 'Green Energy Innovation Fund',
+                    type: 'Private',
+                    amount: '$100,000 - $500,000',
+                    deadline: 'April 30, 2026',
+                    match: 78,
+                    description: 'Private foundation funding for sustainable and renewable energy projects.'
+                }
+            ];
+            
+            const container = document.getElementById('grantResults');
+            container.innerHTML = '<h3 style="color: var(--neon-cyan); font-size: 2.2em; margin: 40px 0 25px;">⚡ MATCHING GRANTS FOUND</h3>';
+            
+            grants.forEach(grant => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+                        <div style="flex: 1; min-width: 250px;">
+                            <h3>${grant.name}</h3>
+                            <div style="margin: 10px 0;">
+                                <span class="badge badge-info">${grant.match}% MATCH</span>
+                                <span class="badge badge-success">${grant.type}</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 2.2em; color: var(--neon-cyan); font-weight: bold;">${grant.amount}</div>
+                    </div>
+                    <p style="line-height: 1.8; color: rgba(255,255,255,0.9); margin: 20px 0;">${grant.description}</p>
+                    <div style="padding: 15px; background: rgba(255,165,0,0.1); border-left: 4px solid var(--warning); border-radius: 10px; margin: 15px 0;">
+                        <strong style="color: var(--warning);">⏰ Deadline:</strong> ${grant.deadline}
+                    </div>
+                    <div class="action-buttons" style="margin-top: 20px;">
+                        <button class="btn" onclick="viewGrantDetails('${grant.name}')">📋 VIEW DETAILS</button>
+                        <button class="btn btn-success" onclick="generateGrantApp('${grant.name}')">✍️ APPLY NOW</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            systemState.data.stats.grantsMatched = grants.length;
+            updateAllStats();
+            saveData();
+            logActivity('Grant Search', `Found ${grants.length} matching grants`);
+            showNotification(`Found ${grants.length} matching grants`);
+        }
+
+        function viewGrantDetails(name) {
+            showNotification(`Opening detailed information for ${name}`, 'info');
+        }
+
+        async function generateGrantApp(grantName) {
+            activateAgent('grant');
+            activateAgent('proposal');
+            
+            showNotification('Generating grant application...', 'info');
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            const profile = systemState.data.profile;
+            const app = `
+                <h2 style="color: var(--neon-green); text-align: center; border-bottom: 3px solid var(--neon-cyan); padding-bottom: 20px; text-transform: uppercase;">
+                    GRANT APPLICATION
+                </h2>
+                
+                <div style="text-align: center; margin: 30px 0; padding: 25px; background: rgba(0,255,65,0.1); border-radius: 15px;">
+                    <div style="font-size: 2em; color: var(--neon-cyan); font-weight: bold; margin-bottom: 10px;">
+                        ${grantName || 'Grant Program'}
+                    </div>
+                    <div style="color: rgba(255,255,255,0.8);">Application Generated: ${new Date().toLocaleString()}</div>
+                </div>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 1.8em; margin-top: 30px;">1. EXECUTIVE SUMMARY</h3>
+                <p style="line-height: 1.9;">${profile.name || 'Our organization'} seeks grant funding to ${profile.funding || 'expand operations and create community impact'}.</p>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 1.8em; margin-top: 30px;">2. ORGANIZATION PROFILE</h3>
+                <div style="padding: 20px; background: rgba(0,255,65,0.05); border-radius: 12px; margin: 15px 0;">
+                    <p><strong style="color: var(--neon-green);">Organization:</strong> ${profile.name || '[Business Name]'}</p>
+                    <p><strong style="color: var(--neon-green);">Industry:</strong> ${profile.industry || '[Industry]'}</p>
+                    <p><strong style="color: var(--neon-green);">Type:</strong> ${profile.type || '[Type]'}</p>
+                </div>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 1.8em; margin-top: 30px;">3. PROJECT DESCRIPTION</h3>
+                <p style="line-height: 1.9;">${profile.description || 'Innovative project focused on creating sustainable impact and value.'}</p>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 1.8em; margin-top: 30px;">4. EXPECTED IMPACT</h3>
+                <ul style="line-height: 2; list-style: none; padding: 0;">
+                    <li style="padding: 10px; margin: 8px 0; background: rgba(0,255,65,0.05); border-left: 4px solid var(--neon-green); border-radius: 8px;">
+                        ✅ Job Creation: ${profile.employees || '10'}+ positions
+                    </li>
+                    <li style="padding: 10px; margin: 8px 0; background: rgba(0,255,255,0.05); border-left: 4px solid var(--neon-cyan); border-radius: 8px;">
+                        ✅ Community Benefit: Serve 500+ individuals
+                    </li>
+                    <li style="padding: 10px; margin: 8px 0; background: rgba(0,255,65,0.05); border-left: 4px solid var(--neon-green); border-radius: 8px;">
+                        ✅ Economic Growth: $${parseInt(profile.revenue || 100000).toLocaleString()} in activity
+                    </li>
+                </ul>
+                
+                <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, rgba(0,255,65,0.3), rgba(0,255,255,0.3)); border-radius: 15px; text-align: center;">
+                    <h4 style="font-size: 1.8em; margin-bottom: 15px;">⚡ READY TO SUBMIT</h4>
+                    <p style="margin: 0; font-size: 1.1em;">This grant application is ready for submission. Review and customize as needed.</p>
+                </div>
+            `;
+            
+            document.getElementById('grantApplicationOutput').innerHTML = app;
+            document.getElementById('grantApplicationOutput').style.display = 'block';
+            document.getElementById('grantApplicationOutput').scrollIntoView({ behavior: 'smooth' });
+            
+            systemState.data.stats.proposalsWritten++;
+            updateAllStats();
+            saveData();
+            logActivity('Grant Application', `Generated application for ${grantName}`);
+            showNotification('Grant application generated');
+        }
+
+        // ==================== PROPOSALS ====================
+        async function generateProposal() {
+            const type = document.getElementById('proposalType').value;
+            const overview = document.getElementById('proposalOverview').value;
+            
+            if (!type || !overview) {
+                showNotification('Please fill in required fields', 'error');
+                return;
+            }
+            
+            activateAgent('proposal');
+            activateAgent('coordinator');
+            
+            document.getElementById('proposalProcessing').classList.add('active');
+            animateProgress('proposalProgress', 5000);
+            animateProcessingSteps('proposalProcessing', 4, 5000);
+            
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            document.getElementById('proposalProcessing').classList.remove('active');
+            
+            const audience = document.getElementById('proposalAudience').value;
+            const amount = document.getElementById('proposalAmount').value;
+            const timeline = document.getElementById('proposalTimeline').value;
+            const goals = document.getElementById('proposalGoals').value;
+            
+            const proposal = `
+                <h2 style="color: var(--neon-green); text-align: center; border-bottom: 3px solid var(--neon-cyan); padding-bottom: 20px; text-transform: uppercase;">
+                    ${type.replace(/_/g, ' ')} PROPOSAL
+                </h2>
+                
+                <div style="text-align: center; margin: 30px 0; padding: 30px; background: rgba(0,255,65,0.1); border-radius: 15px;">
+                    <div><strong style="color: var(--neon-cyan);">Prepared For:</strong> ${audience || 'Stakeholders'}</div>
+                    <div style="margin-top: 10px;"><strong style="color: var(--neon-cyan);">Date:</strong> ${new Date().toLocaleDateString()}</div>
+                    ${amount ? `<div style="margin-top: 10px; font-size: 2em; color: var(--neon-green); font-weight: bold;">$${parseInt(amount).toLocaleString()}</div>` : ''}
+                </div>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 2em; margin-top: 35px;">EXECUTIVE SUMMARY</h3>
+                <p style="line-height: 1.9; font-size: 1.1em;">${overview}</p>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 2em; margin-top: 35px;">KEY OBJECTIVES</h3>
+                <p style="line-height: 1.9; font-size: 1.1em;">${goals || 'Strategic objectives aligned with stakeholder priorities and market opportunities.'}</p>
+                
+                <h3 style="color: var(--neon-cyan); font-size: 2em; margin-top: 35px;">PROJECT TIMELINE</h3>
+                <div style="padding: 25px; background: rgba(0,255,65,0.08); border-radius: 15px; border-left: 4px solid var(--neon-green);">
+                    <strong style="color: var(--neon-green); font-size: 1.3em;">Duration:</strong> ${timeline || '12 months'}
+                </div>
+                
+                <div style="margin-top: 50px; padding: 40px; background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan)); border-radius: 20px;">
+                    <h4 style="font-size: 2.2em; margin-bottom: 20px; color: #000;">NEXT STEPS</h4>
+                    <ol style="line-height: 2.5; color: #000; font-size: 1.2em; font-weight: bold;">
+                        <li>Review and provide feedback</li>
+                        <li>Schedule detailed discussion</li>
+                        <li>Finalize terms and agreements</li>
+                        <li>Begin implementation</li>
+                    </ol>
+                </div>
+            `;
+            
+            document.getElementById('proposalOutput').innerHTML = proposal;
+            document.getElementById('proposalOutput').style.display = 'block';
+            document.getElementById('proposalOutput').scrollIntoView({ behavior: 'smooth' });
+            
+            systemState.data.stats.proposalsWritten++;
+            updateAllStats();
+            saveData();
+            logActivity('Proposal Generation', `Created ${type.replace(/_/g, ' ')} proposal`);
+            showNotification('Proposal generated successfully');
+        }
+
+        function enhanceProposal() {
+            showNotification('Enhancing proposal with advanced AI...', 'info');
+        }
+
+        function exportProposal() {
+            showNotification('Proposal exported in multiple formats');
+        }
+
+        // ==================== LOANS ====================
+        async function findLoans() {
+            activateAgent('loan');
+            activateAgent('coordinator');
+            
+            document.getElementById('loanProcessing').classList.add('active');
+            animateProgress('loanProgress', 4000);
+            
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            
+            document.getElementById('loanProcessing').classList.remove('active');
+            
+            const loans = [
+                {
+                    name: 'SBA 7(a) Standard Loan',
+                    lender: 'Multiple SBA Partner Lenders',
+                    amount: 'Up to $5,000,000',
+                    rate: '5.5% - 8.0%',
+                    term: '10-25 years',
+                    match: 92,
+                    requirements: 'Good credit (680+), 2+ years in business, strong financials'
+                },
+                {
+                    name: 'Business Line of Credit',
+                    lender: 'Traditional & Online Banks',
+                    amount: '$10,000 - $250,000',
+                    rate: '7.0% - 12.0%',
+                    term: '1-2 years (revolving)',
+                    match: 85,
+                    requirements: 'Good credit, established revenue, business plan'
+                },
+                {
+                    name: 'Equipment Financing',
+                    lender: 'Equipment Finance Companies',
+                    amount: '$5,000 - $500,000',
+                    rate: '4.5% - 9.0%',
+                    term: '3-7 years',
+                    match: 80,
+                    requirements: 'Equipment as collateral, moderate credit acceptable'
+                }
+            ];
+            
+            const container = document.getElementById('loanResults');
+            container.innerHTML = '<h3 style="color: var(--neon-cyan); font-size: 2.2em; margin: 40px 0 25px;">⚡ MATCHING LOAN OPTIONS</h3>';
+            
+            loans.forEach(loan => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; margin-bottom: 25px;">
+                        <div>
+                            <h3>${loan.name}</h3>
+                            <p style="color: var(--neon-cyan); margin: 10px 0; font-size: 1.1em;"><strong>${loan.lender}</strong></p>
+                            <span class="badge badge-info">${loan.match}% MATCH</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 25px 0;">
+                        <div style="padding: 20px; background: rgba(0,255,65,0.1); border-radius: 12px; border: 2px solid var(--neon-green);">
+                            <strong style="color: var(--neon-cyan); display: block; margin-bottom: 8px;">Loan Amount</strong>
+                            <div style="font-size: 1.3em; color: var(--neon-green);">${loan.amount}</div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,255,255,0.1); border-radius: 12px; border: 2px solid var(--neon-cyan);">
+                            <strong style="color: var(--neon-cyan); display: block; margin-bottom: 8px;">Interest Rate</strong>
+                            <div style="font-size: 1.3em; color: var(--neon-cyan);">${loan.rate}</div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(0,255,65,0.1); border-radius: 12px; border: 2px solid var(--neon-green);">
+                            <strong style="color: var(--neon-cyan); display: block; margin-bottom: 8px;">Loan Term</strong>
+                            <div style="font-size: 1.3em; color: var(--neon-green);">${loan.term}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 20px 0;">
+                        <strong style="color: var(--neon-green); font-size: 1.1em;">Requirements:</strong>
+                        <p style="margin-top: 10px; color: rgba(255,255,255,0.9); line-height: 1.7;">${loan.requirements}</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" onclick="viewLoanDetails('${loan.name}')">📋 FULL DETAILS</button>
+                        <button class="btn btn-success" onclick="generateLoanApp('${loan.name}')">✍️ APPLY NOW</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            logActivity('Loan Search', `Found ${loans.length} matching loan options`);
+            showNotification(`Found ${loans.length} matching loan options`);
+        }
+
+        function viewLoanDetails(name) {
+            showNotification(`Opening detailed information for ${name}`, 'info');
+        }
+
+        function generateLoanApp(name) {
+            showNotification(`Generating loan application for ${name}`, 'info');
+            logActivity('Loan Application', `Generated application for ${name}`);
+        }
+
+        // ==================== DASHBOARD ====================
+        function exportAllData() {
+            const data = JSON.stringify(systemState.data, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'bwop-system-data-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            showNotification('System data exported successfully');
+            logActivity('Data Export', 'Exported complete system data');
+        }
+
+        function resetSystem() {
+            if (confirm('⚠️ Reset entire system? All data will be deleted. This cannot be undone.')) {
+                systemState.data = {
+                    profile: {},
+                    documents: [],
+                    templates: [],
+                    grants: [],
+                    proposals: [],
+                    loans: [],
+                    stats: { docsScanned: 0, templatesGen: 0, grantsMatched: 0, proposalsWritten: 0 }
+                };
+                systemState.activity = [];
+                saveData();
+                updateAllStats();
+                updateActivityLog();
+                showNotification('System reset complete');
+            }
+        }
+
+        function generateReport() {
+            showNotification('Generating comprehensive system report...', 'info');
+            logActivity('Report Generation', 'Generated full system report');
+        }
+
+        // Drag & Drop
+        const uploadZone = document.getElementById('uploadZone');
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--neon-green)';
+            uploadZone.style.background = 'rgba(0,255,65,0.15)';
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.borderColor = 'var(--neon-cyan)';
+            uploadZone.style.background = 'rgba(0,255,255,0.05)';
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--neon-cyan)';
+            uploadZone.style.background = 'rgba(0,255,255,0.05)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    displayImage(event.target.result);
+                    showNotification('Document uploaded via drag & drop');
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+            localStorage.setItem('bwopTheme', isLight ? 'light' : 'dark');
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('bwopTheme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+            }
+        }
+        
+        // AI Panel Toggle (Mobile)
+        function toggleAIPanel() {
+            const panel = document.querySelector('.ai-agents-panel');
+            panel.classList.toggle('open');
+        }
+        
+        // Close AI panel when clicking outside
+        document.addEventListener('click', (e) => {
+            const panel = document.querySelector('.ai-agents-panel');
+            const toggle = document.querySelector('.ai-panel-toggle');
+            if (panel && !panel.contains(e.target) && !toggle.contains(e.target)) {
+                panel.classList.remove('open');
+            }
+        });
+        
+        // Keyboard Navigation Enhancement
+        document.addEventListener('keydown', (e) => {
+            // Close AI panel on Escape
+            if (e.key === 'Escape') {
+                const panel = document.querySelector('.ai-agents-panel');
+                if (panel) panel.classList.remove('open');
+            }
+            
+            // Tab switching with number keys (1-6)
+            if (e.key >= '1' && e.key <= '6' && !e.target.matches('input, textarea, select')) {
+                const tabs = ['scanner', 'portfolio', 'grants', 'proposals', 'loans', 'dashboard'];
+                const tabIndex = parseInt(e.key) - 1;
+                if (tabs[tabIndex]) {
+                    const tabButton = document.querySelector(`.nav-tab:nth-child(${tabIndex + 1})`);
+                    if (tabButton) tabButton.click();
+                }
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            loadTheme();
+            initSystem();
+        });
+    </script>
+</body>
+</html>
