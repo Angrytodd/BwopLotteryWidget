@@ -41,13 +41,16 @@ class MainActivity : ComponentActivity() {
 fun BwopLotteryApp() {
     val tabs = listOf(
         TabItem("🏠", "Dashboard"),
+        TabItem("🔥", "SamLotto"),
+        TabItem("➕", "Sum"),
+        TabItem("🌱", "Seed"),
         TabItem("🎲", "PRNG"),
         TabItem("📊", "IDA"),
         TabItem("🤖", "AI Models"),
         TabItem("🔐", "Checksum"),
         TabItem("📜", "History")
     )
-    
+
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val coroutineScope = rememberCoroutineScope()
     
@@ -70,7 +73,7 @@ fun BwopLotteryApp() {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "IDA + PRNG + Checksum Engine",
+                    text = "🔥 SamLotto Integration • IDA + PRNG",
                     color = TextSecondary,
                     fontSize = 12.sp
                 )
@@ -163,11 +166,14 @@ fun BwopLotteryApp() {
         ) { page ->
             when (page) {
                 0 -> DashboardScreen()
-                1 -> PRNGScreen()
-                2 -> IDAScreen()
-                3 -> AIModelsScreen()
-                4 -> ChecksumScreen()
-                5 -> HistoricalScreen()
+                1 -> SamLottoScreen()
+                2 -> SumScreen()
+                3 -> SeedScreen()
+                4 -> PRNGScreen()
+                5 -> IDAScreen()
+                6 -> AIModelsScreen()
+                7 -> ChecksumScreen()
+                8 -> HistoricalScreen()
             }
         }
     }
