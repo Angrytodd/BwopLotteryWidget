@@ -32,3 +32,7 @@ project/.cache/
 # Temporary files
 *.tmp
 *.temp
+
+# Gradle files in root (Android project is in BwopLotteryWidget/ subdirectory)
+/.gradle/
+/settings.gradle.kts
