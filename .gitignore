@@ -32,3 +32,9 @@ project/.cache/
 # Temporary files
 *.tmp
 *.temp
+
+# Gradle
+.gradle/
+build/
+*/build/
+local.properties
